@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy 
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 # Creamos la instancia de la aplicación
 app = Flask(__name__)
@@ -50,16 +50,12 @@ def calcular_nota_final(notas_alumno, ponderaciones):
 # Esta es una URL que la gente puede visitar.
 @app.route("/")
 def inicio():
-    alumno_ejemplo = {
-        "parciales": [8, 10],
-        "tps": [9],
-        "conceptual": [10]
-    }
-    nota = calcular_nota_final(alumno_ejemplo, PONDERACION_CURSO)
-
-    # ¡Ahora usamos el template!
-    # Le pasamos la variable 'nota' a HTML como 'nota_calculada'
-    return render_template("index.html", nota_calculada=f"{nota:.2f}")
+    # 1. Obtenemos TODOS los alumnos desde la base de datos
+    alumnos_db = Alumno.query.all()
+    
+    # 2. Se los pasamos al template HTML
+    # (Por ahora, la tabla estará vacía, ¡y eso está bien!)
+    return render_template("index.html", alumnos=alumnos_db)
 
 with app.app_context():
     db.create_all()

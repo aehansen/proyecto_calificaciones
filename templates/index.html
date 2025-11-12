@@ -3,12 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Calculadora de Notas</title>
-    </head>
+    <style>
+        table { border-collapse: collapse; width: 50%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        form { margin-top: 20px; }
+    </style>
+</head>
 <body>
     <h1>Bienvenido al Calculador de Notas</h1>
-
-    <h2>Nota Final (Ejemplo)</h2>
-    <p>La nota final del alumno de ejemplo es: <strong>{{ nota_calculada }}</strong></p>
+    
+    <h2>Listado de Alumnos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre del Alumno</th>
+                <th>Nota Final</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alumno in alumnos %}
+            <tr>
+                <td>{{ alumno.nombre }}</td>
+                <td>(pendiente)</td> </tr>
+            {% else %}
+            <tr>
+                <td colspan="2">No hay alumnos cargados todavía.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 </body>
 </html>
