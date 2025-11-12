@@ -39,7 +39,17 @@ def calcular_promedio_lista(lista_notas):
 def calcular_nota_final(notas_alumno, ponderaciones):
     promedio_parciales = calcular_promedio_lista(notas_alumno.get("parciales", []))
     promedio_tps = calcular_promedio_lista(notas_alumno.get("tps", []))
-    nota_conceptual = notas_alumno.get("conceptual", [0])[0]
+    
+    # 1. Obtenemos la lista de notas conceptuales.
+    lista_conceptual = notas_alumno.get("conceptual", []) 
+    
+    # 2. Verificamos si la lista NO está vacía.
+    if lista_conceptual:
+        # Si tiene notas, usamos la primera (asumimos una sola nota)
+        nota_conceptual = lista_conceptual[0]
+    else:
+        # Si está vacía, la nota conceptual es 0
+        nota_conceptual = 0
 
     nota_final = (promedio_parciales * ponderaciones["parciales"]) + \
                  (promedio_tps * ponderaciones["tps"]) + \
