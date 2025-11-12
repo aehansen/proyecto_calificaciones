@@ -59,6 +59,25 @@ def inicio():
 
 with app.app_context():
     db.create_all()
+    
+# --- 4. Ruta para AGREGAR ALUMNO ---
+@app.route("/agregar_alumno", methods=["POST"])
+def agregar_alumno():
+    # 1. Obtenemos el nombre desde el formulario
+    # El 'name="nombre_alumno"' del <input> se vuelve la clave aquí
+    nombre = request.form.get("nombre_alumno")
+    
+    # 2. Verificamos que no esté vacío
+    if nombre:
+        # 3. Creamos un nuevo objeto Alumno
+        nuevo_alumno = Alumno(nombre=nombre)
+        
+        # 4. Lo guardamos en la base de datos
+        db.session.add(nuevo_alumno)
+        db.session.commit()
+        
+    # 5. Redirigimos al usuario de vuelta a la página principal
+    return redirect(url_for("inicio"))
 # --------------------------------------
 
 # Esto permite correr el servidor de desarrollo

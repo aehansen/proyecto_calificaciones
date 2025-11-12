@@ -33,6 +33,12 @@
             {% endfor %}
         </tbody>
     </table>
-
+    <hr>
+    <h2>Agregar Nuevo Alumno</h2>
+    <form action="/agregar_alumno" method="POST">
+        <label for="nombre_alumno">Nombre:</label>
+        <input type="text" id="nombre_alumno" name="nombre_alumno" required>
+        <button type="submit">Agregar Alumno</button>
+    </form>
 </body>
 </html>
