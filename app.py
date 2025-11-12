@@ -149,6 +149,18 @@ def agregar_nota():
     # 5. Redirigimos al usuario de vuelta a la página principal
     return redirect(url_for("inicio"))
 # --------------------------------------
+
+@app.route("/alumno/<int:alumno_id>")
+def detalle_alumno(alumno_id):
+    # 1. Buscamos al alumno específico por su ID.
+    # .get_or_404() es una función genial: 
+    #   - Intenta encontrar el alumno.
+    #   - Si no lo encuentra, automáticamente muestra una página de error 404.
+    alumno = Alumno.query.get_or_404(alumno_id)
+    
+    # 2. Renderizamos el template "detalle_alumno.html"
+    return render_template("detalle_alumno.html", alumno=alumno)
+
 with app.app_context():
     db.create_all()
 # Esto permite correr el servidor de desarrollo
