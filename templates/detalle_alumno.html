@@ -5,10 +5,25 @@
     <title>Detalle de {{ alumno.nombre }}</title>
     <style>
         body { font-family: sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 40%; }
+        table { border-collapse: collapse; width: 50%; } /* Ancho aumentado */
         th, td { border: 1px solid #ccc; padding: 8px; }
         th { background-color: #f4f4f4; }
         a { color: #007bff; text-decoration: none; }
+        
+        /* Estilos para el botón de borrar */
+        .btn-borrar {
+            color: red;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 4px 8px;
+        }
+        .form-borrar {
+            display: inline; /* Evita que el formulario ocupe una línea nueva */
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -19,18 +34,22 @@
             <tr>
                 <th>Tipo de Nota</th>
                 <th>Valor</th>
-            </tr>
+                <th>Acción</th> </tr>
         </thead>
         <tbody>
             {% for nota in alumno.notas %}
             <tr>
                 <td>{{ nota.tipo.capitalize() }}</td> 
                 <td>{{ nota.valor }}</td>
+                <td>
+                    <form action="{{ url_for('borrar_nota', nota_id=nota.id) }}" method="POST" class="form-borrar">
+                        <button type="submit" class="btn-borrar">[X]</button>
+                    </form>
+                </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="2">Este alumno no tiene notas cargadas.</td>
-            </tr>
+                <td colspan="3">Este alumno no tiene notas cargadas.</td> </tr>
             {% endfor %}
         </tbody>
     </table>

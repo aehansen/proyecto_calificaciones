@@ -161,6 +161,24 @@ def detalle_alumno(alumno_id):
     # 2. Renderizamos el template "detalle_alumno.html"
     return render_template("detalle_alumno.html", alumno=alumno)
 
+@app.route("/borrar_nota/<int:nota_id>", methods=["POST"])
+def borrar_nota(nota_id):
+    # 1. Buscamos la nota por su ID. Si no la encuentra, da error 404.
+    nota_a_borrar = Nota.query.get_or_404(nota_id)
+    
+    # 2. Guardamos el ID del alumno ANTES de borrar la nota,
+    #    para saber a qué página de detalle debemos volver.
+    alumno_id_redirect = nota_a_borrar.alumno_id
+    
+    # 3. Borramos la nota de la sesión de la base de datos
+    db.session.delete(nota_a_borrar)
+    
+    # 4. Confirmamos los cambios en la base de datos
+    db.session.commit()
+    
+    # 5. Redirigimos al usuario de vuelta a la página de detalle del alumno
+    return redirect(url_for('detalle_alumno', alumno_id=alumno_id_redirect))
+
 with app.app_context():
     db.create_all()
 # Esto permite correr el servidor de desarrollo
