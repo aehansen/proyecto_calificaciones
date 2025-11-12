@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Nota</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Nota</h1>
+        <h2>Alumno: {{ nota.alumno.nombre }}</h2>
+
+        <form action="{{ url_for('actualizar_nota', nota_id=nota.id) }}" method="POST" class="form-editar">
+            
+            <label for="tipo_nota">Tipo:</label>
+            <select id="tipo_nota" name="tipo_nota" required>
+                <option value="parcial" {% if nota.tipo == 'parcial' %}selected{% endif %}>
+                    Parcial
+                </option>
+                <option value="tp" {% if nota.tipo == 'tp' %}selected{% endif %}>
+                    Trabajo Práctico
+                </option>
+                <option value="conceptual" {% if nota.tipo == 'conceptual' %}selected{% endif %}>
+                    Conceptual
+                </option>
+            </select>
+            
+            <label for="valor_nota">Nota (1-10):</label>
+            <input type="number" id="valor_nota" name="valor_nota" 
+                   value="{{ nota.valor }}" 
+                   step="0.01" min="1" max="10" required>
+            
+            <button type="submit">Guardar Cambios</button>
+        </form>
+
+        <a href="{{ url_for('detalle_alumno', alumno_id=nota.alumno.id) }}" class="link-volver" style="margin-top: 20px;">
+            &larr; Cancelar y Volver
+        </a>
+    </div>
+</body>
+</html>

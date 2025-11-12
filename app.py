@@ -179,6 +179,35 @@ def borrar_nota(nota_id):
     # 5. Redirigimos al usuario de vuelta a la página de detalle del alumno
     return redirect(url_for('detalle_alumno', alumno_id=alumno_id_redirect))
 
+@app.route("/editar_nota/<int:nota_id>", methods=["GET"])
+def editar_nota(nota_id):
+    # 1. Buscamos la nota que el usuario quiere editar
+    nota = Nota.query.get_or_404(nota_id)
+    
+    # 2. Renderizamos el nuevo template 'editar_nota.html'
+    #    y le pasamos el objeto 'nota' para que rellene el formulario.
+    return render_template("editar_nota.html", nota=nota)
+
+@app.route("/actualizar_nota/<int:nota_id>", methods=["POST"])
+def actualizar_nota(nota_id):
+    # 1. Buscamos la nota que queremos actualizar en la DB
+    nota_a_actualizar = Nota.query.get_or_404(nota_id)
+    
+    # 2. Obtenemos los nuevos datos del formulario
+    nuevo_tipo = request.form.get("tipo_nota")
+    nuevo_valor = request.form.get("valor_nota")
+    
+    # 3. Actualizamos el objeto 'nota' con los nuevos valores
+    if nuevo_tipo and nuevo_valor:
+        nota_a_actualizar.tipo = nuevo_tipo
+        nota_a_actualizar.valor = float(nuevo_valor)
+        
+        # 4. Guardamos los cambios en la base de datos
+        db.session.commit()
+
+    # 5. Redirigimos al usuario de vuelta a la página de detalle
+    return redirect(url_for('detalle_alumno', alumno_id=nota_a_actualizar.alumno_id))
+
 with app.app_context():
     db.create_all()
 # Esto permite correr el servidor de desarrollo

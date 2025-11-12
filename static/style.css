@@ -150,3 +150,33 @@ button[type="submit"]:hover {
     font-weight: bold;
     font-size: 1.1em;
 }
+
+.btn-editar {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #ffc107; /* Amarillo */
+    color: #333;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.btn-editar:hover {
+    background-color: #e0a800;
+}
+
+/* Hacemos que el formulario de borrar y el botón de editar convivan en la misma línea */
+td .form-borrar {
+    display: inline-block;
+    vertical-align: middle;
+}
+td .btn-editar {
+    vertical-align: middle;
+}
+
+/* --- Estilos para el formulario de edición --- */
+.form-editar {
+    display: block; /* Que el formulario ocupe su propia línea */
+}
