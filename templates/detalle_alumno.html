@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de {{ alumno.nombre }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 40%; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
+        th { background-color: #f4f4f4; }
+        a { color: #007bff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <h1>Notas de: {{ alumno.nombre }}</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo de Nota</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nota in alumno.notas %}
+            <tr>
+                <td>{{ nota.tipo.capitalize() }}</td> 
+                <td>{{ nota.valor }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="2">Este alumno no tiene notas cargadas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p style="margin-top: 20px;">
+        <a href="{{ url_for('inicio') }}">&larr; Volver al listado</a>
+    </p>
+
+</body>
+</html>
