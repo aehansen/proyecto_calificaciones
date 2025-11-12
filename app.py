@@ -45,7 +45,25 @@ def calcular_nota_final(notas_alumno, ponderaciones):
                  (promedio_tps * ponderaciones["tps"]) + \
                  (nota_conceptual * ponderaciones["conceptual"])
     return nota_final
-
+def procesar_notas_db(alumno_obj):
+    """
+    Toma un objeto Alumno de la DB y convierte su lista de notas
+    en el diccionario que 'calcular_nota_final' espera.
+    """
+    notas_dict = {
+        "parciales": [],
+        "tps": [],
+        "conceptual": []
+    }
+    # alumno_obj.notas es la lista de objetos Nota gracias a la 'relationship'
+    for nota in alumno_obj.notas:
+        if nota.tipo == 'parcial':
+            notas_dict['parciales'].append(nota.valor)
+        elif nota.tipo == 'tp':
+            notas_dict['tps'].append(nota.valor)
+        elif nota.tipo == 'conceptual':
+            notas_dict['conceptual'].append(nota.valor)
+    return notas_dict
 # --- 3. Definimos una "Ruta" o "Endpoint" ---
 # Esta es una URL que la gente puede visitar.
 @app.route("/")
@@ -53,18 +71,34 @@ def inicio():
     # 1. Obtenemos TODOS los alumnos desde la base de datos
     alumnos_db = Alumno.query.all()
     
-    # 2. Se los pasamos al template HTML
-    # (Por ahora, la tabla estará vacía, ¡y eso está bien!)
-    return render_template("index.html", alumnos=alumnos_db)
+    alumnos_calculados = []
+    for alumno in alumnos_db:
+        # 2. Para cada alumno, procesamos sus notas
+        notas_dict = procesar_notas_db(alumno)
+        
+        # 3. Calculamos su nota final
+        nota_final = calcular_nota_final(notas_dict, PONDERACION_CURSO)
+        
+        # 4. Creamos un diccionario limpio para el template
+        alumnos_calculados.append({
+            "nombre": alumno.nombre,
+            "id": alumno.id,
+            "nota_final": nota_final
+        })
+        
+    # 5. Se los pasamos al template HTML
+    #    Pasamos 'alumnos_calculados' para la tabla
+    #    Pasamos 'alumnos_db' para el dropdown del formulario
+    return render_template(
+        "index.html", 
+        alumnos_calculados=alumnos_calculados,
+        alumnos_db=alumnos_db 
+    )
 
-with app.app_context():
-    db.create_all()
-    
-# --- 4. Ruta para AGREGAR ALUMNO ---
+# --- RUTA AGREGAR ALUMNO (Sin cambios) ---
 @app.route("/agregar_alumno", methods=["POST"])
 def agregar_alumno():
     # 1. Obtenemos el nombre desde el formulario
-    # El 'name="nombre_alumno"' del <input> se vuelve la clave aquí
     nombre = request.form.get("nombre_alumno")
     
     # 2. Verificamos que no esté vacío
@@ -78,8 +112,35 @@ def agregar_alumno():
         
     # 5. Redirigimos al usuario de vuelta a la página principal
     return redirect(url_for("inicio"))
-# --------------------------------------
 
+
+# --- ¡NUEVA RUTA PARA AGREGAR NOTA! ---
+@app.route("/agregar_nota", methods=["POST"])
+def agregar_nota():
+    # 1. Obtenemos todos los datos del formulario
+    alumno_id = request.form.get("alumno_id")
+    tipo_nota = request.form.get("tipo_nota")
+    valor_nota = request.form.get("valor_nota")
+
+    # 2. Verificamos que los datos existan
+    if alumno_id and tipo_nota and valor_nota:
+        # 3. Creamos el nuevo objeto Nota
+        #    'alumno_id' es la clave foránea que lo vincula al alumno
+        nueva_nota = Nota(
+            tipo=tipo_nota,
+            valor=float(valor_nota),
+            alumno_id=int(alumno_id) 
+        )
+        
+        # 4. Guardamos la nota en la base de datos
+        db.session.add(nueva_nota)
+        db.session.commit()
+        
+    # 5. Redirigimos al usuario de vuelta a la página principal
+    return redirect(url_for("inicio"))
+# --------------------------------------
+with app.app_context():
+    db.create_all()
 # Esto permite correr el servidor de desarrollo
 if __name__ == '__main__':
     app.run(debug=True)
