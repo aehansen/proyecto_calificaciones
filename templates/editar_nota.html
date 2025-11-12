@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+    <header class="app-header">
+        <img src="https://esin.prefecturanaval.gob.ar/pluginfile.php/1/theme_academi/logo/-1/esin.png" alt="Logo ESIN" class="app-logo">
+    </header>
+
     <div class="container">
         <h1>Editar Nota</h1>
         <h2>Alumno: {{ nota.alumno.nombre }}</h2>
@@ -36,6 +41,9 @@
         <a href="{{ url_for('detalle_alumno', alumno_id=nota.alumno.id) }}" class="link-volver" style="margin-top: 20px;">
             &larr; Cancelar y Volver
         </a>
-    </div>
+    </div> <footer class="app-footer">
+        <p>Herramienta desarrollada por Andrés Enrique Hansen</p>
+    </footer>
+
 </body>
 </html>

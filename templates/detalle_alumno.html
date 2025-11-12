@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
+    <header class="app-header">
+        <img src="https://esin.prefecturanaval.gob.ar/pluginfile.php/1/theme_academi/logo/-1/esin.png" alt="Logo ESIN" class="app-logo">
+    </header>
+
     <div class="container">
         <h1>Notas de: {{ alumno.nombre }}</h1>
         
@@ -24,7 +29,6 @@
                     <td>{{ nota.valor }}</td>
                     <td>
                         <a href="{{ url_for('editar_nota', nota_id=nota.id) }}" class="btn-editar">Editar</a>
-                        
                         <form action="{{ url_for('borrar_nota', nota_id=nota.id) }}" method="POST" class="form-borrar">
                             <button type="submit" class="btn-borrar">[X]</button>
                         </form>
@@ -40,5 +44,9 @@
 
         <a href="{{ url_for('inicio') }}" class="link-volver">&larr; Volver al listado</a>
     
-    </div> </body>
+    </div> <footer class="app-footer">
+        <p>Herramienta desarrollada por Andrés Enrique Hansen</p>
+    </footer>
+
+</body>
 </html>

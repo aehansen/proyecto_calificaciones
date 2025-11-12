@@ -208,6 +208,24 @@ def actualizar_nota(nota_id):
     # 5. Redirigimos al usuario de vuelta a la página de detalle
     return redirect(url_for('detalle_alumno', alumno_id=nota_a_actualizar.alumno_id))
 
+@app.route("/borrar_alumno/<int:alumno_id>", methods=["POST"])
+def borrar_alumno(alumno_id):
+    # 1. Buscamos al alumno por su ID
+    alumno_a_borrar = Alumno.query.get_or_404(alumno_id)
+    
+    # 2. ¡MUY IMPORTANTE! Borramos todas las notas asociadas a este alumno primero.
+    for nota in alumno_a_borrar.notas:
+        db.session.delete(nota)
+        
+    # 3. Ahora sí, borramos al alumno
+    db.session.delete(alumno_a_borrar)
+    
+    # 4. Confirmamos todos los cambios
+    db.session.commit()
+    
+    # 5. Redirigimos de vuelta a la página de inicio
+    return redirect(url_for('inicio'))
+
 with app.app_context():
     db.create_all()
 # Esto permite correr el servidor de desarrollo

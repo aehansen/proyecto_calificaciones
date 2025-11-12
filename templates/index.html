@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    
+    <header class="app-header">
+        <img src="https://esin.prefecturanaval.gob.ar/pluginfile.php/1/theme_academi/logo/-1/esin.png" alt="Logo ESIN" class="app-logo">
+    </header>
+
     <div class="container">
         <h1>Calculador de Notas</h1>
         
@@ -15,17 +20,22 @@
                 <tr>
                     <th>Nombre del Alumno</th>
                     <th>Nota Final</th>
-                </tr>
+                    <th>Acción</th> </tr>
             </thead>
             <tbody>
                 {% for alumno in alumnos_calculados %}
                 <tr>
                     <td><a href="{{ url_for('detalle_alumno', alumno_id=alumno.id) }}">{{ alumno.nombre }}</a></td>
                     <td><strong>{{ "%.2f"|format(alumno.nota_final) }}</strong></td>
+                    <td>
+                        <form action="{{ url_for('borrar_alumno', alumno_id=alumno.id) }}" method="POST" class="form-borrar">
+                            <button type="submit" class="btn-borrar">[X]</button>
+                        </form>
+                    </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="2">No hay alumnos cargados todavía.</td>
+                    <td colspan="3">No hay alumnos cargados todavía.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -62,5 +72,9 @@
             
             <button type="submit">Agregar Nota</button>
         </form>
-    </div> </body>
+    </div> <footer class="app-footer">
+        <p>Herramienta desarrollada por Andrés Enrique Hansen</p>
+    </footer>
+
+</body>
 </html>

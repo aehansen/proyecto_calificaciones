@@ -180,3 +180,26 @@ td .btn-editar {
 .form-editar {
     display: block; /* Que el formulario ocupe su propia línea */
 }
+.app-header {
+    display: flex;
+    align-items: center;
+    /* Ancho máximo y centrado para que se alinee con el .container */
+    max-width: 800px;
+    margin: 0 auto 10px auto;
+    /* Mismo padding horizontal que el .container */
+    padding: 0 40px; 
+}
+
+.app-logo {
+    height: 60px; /* Alto del logo */
+    width: auto;
+}
+
+.app-footer {
+    text-align: right;
+    max-width: 800px;
+    margin: 20px auto 0 auto;
+    padding: 0 40px 20px 0;
+    font-size: 0.9em;
+    color: #888;
+}
