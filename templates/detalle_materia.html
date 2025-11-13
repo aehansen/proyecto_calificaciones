@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Notas - {{ materia.nombre }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    
+    <header class="app-header">
+        <img src="https://esin.prefecturanaval.gob.ar/pluginfile.php/1/theme_academi/logo/-1/esin.png" alt="Logo ESIN" class="app-logo">
+    </header>
+
+    <div class="container">
+        <h1>Calculador de Notas: {{ materia.nombre }}</h1>
+        
+        <h2>Listado de Alumnos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Alumno</th>
+                    <th>Nota Final</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alumno in alumnos_calculados %}
+                <tr>
+                    <td><a href="{{ url_for('detalle_alumno', alumno_id=alumno.id) }}">{{ alumno.nombre }}</a></td>
+                    <td><strong>{{ "%.2f"|format(alumno.nota_final) }}</strong></td>
+                    <td>
+                        <form action="{{ url_for('borrar_alumno', alumno_id=alumno.id) }}" method="POST" class="form-borrar">
+                            <button type="submit" class="btn-borrar">[X]</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">No hay alumnos cargados todavía.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2>Agregar Nuevo Alumno</h2>
+        <form action="/agregar_alumno" method="POST">
+            <label for="nombre_alumno">Nombre:</label>
+            <input type="text" id="nombre_alumno" name="nombre_alumno" required>
+            <input type="hidden" name="materia_id" value="{{ materia.id }}">
+            <button type="submit">Agregar Alumno</button>
+        </form>
+
+        <h2>Agregar Nota a un Alumno</h2>
+        <form action="/agregar_nota" method="POST">
+            <label for="alumno_select">Alumno:</label>
+            <select id="alumno_select" name="alumno_id" required>
+                <option value="">-- Seleccione un alumno --</option>
+                {% for alumno in alumnos_db %}
+                    <option value="{{ alumno.id }}">{{ alumno.nombre }}</option>
+                {% endfor %}
+            </select>
+            
+            <label for="tipo_nota">Tipo:</label>
+            <select id="tipo_nota" name="tipo_nota" required>
+                <option value="parcial">Parcial</option>
+                <option value="tp">Trabajo Práctico</option>
+                <option value="conceptual">Conceptual</option>
+            </select>
+            
+            <label for="valor_nota">Nota (1-10):</label>
+            <input type="number" id="valor_nota" name="valor_nota" step="0.01" min="1" max="10" required>
+            
+            <button type="submit">Agregar Nota</button>
+        </form>
+
+        <a href="{{ url_for('inicio') }}" class="link-volver" style="margin-top: 20px;">&larr; Volver al listado de Materias</a>
+    </div>
+
+    <footer class="app-footer">
+        <p>Herramienta desarrollada por Andrés Enrique Hansen</p>
+    </footer>
+
+</body>
+</html>
