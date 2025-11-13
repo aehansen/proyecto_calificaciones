@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Notas - Materias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    
+    <header class="app-header">
+        <img src="https://esin.prefecturanaval.gob.ar/pluginfile.php/1/theme_academi/logo/-1/esin.png" alt="Logo ESIN" class="app-logo">
+    </header>
+
+    <div class="container">
+        <h1>Gestor de Cursadas</h1>
+        
+        <h2>Listado de Materias</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre de la Materia</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for materia in materias %}
+                <tr>
+                    <td><a href="{{ url_for('detalle_materia', materia_id=materia.id) }}">{{ materia.nombre }}</a></td>
+                    <td>
+                        </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2">No hay materias cargadas todavía.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2>Agregar Nueva Materia</h2>
+        <form action="/agregar_materia" method="POST">
+            <label for="nombre_materia">Nombre:</label>
+            <input type="text" id="nombre_materia" name="nombre_materia" required>
+            <button type="submit">Agregar Materia</button>
+        </form>
+    </div>
+
+    <footer class="app-footer">
+        <p>Herramienta desarrollada por Andrés Enrique Hansen</p>
+    </footer>
+
+</body>
+</html>
